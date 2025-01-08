@@ -20,10 +20,12 @@ protected:
 public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	FVector SetMoveVector();
+	FVector2D SetMoveVector();
 	void Move();
 	UPROPERTY(VisibleAnywhere)
 	int32 moveCount = 0;
 	UPROPERTY(VisibleAnywhere)
-	FVector startLocation;
+	FVector2D startLocation = FVector2D(0,0);
+	UPROPERTY(VisibleAnywhere)
+	FVector2D currentLocation;
 };

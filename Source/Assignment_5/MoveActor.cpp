@@ -12,8 +12,8 @@ void AMoveActor::BeginPlay()
 {
 	Super::BeginPlay();
 	FTimerHandle timerHandle;
-	startLocation = GetActorLocation();
 	UE_LOG(LogTemp, Warning, TEXT("Start!!"));
+	currentLocation = startLocation;
 	GetWorld()->GetTimerManager().SetTimer(timerHandle, this, &AMoveActor::Move, 1, true, 2);
 }
 
@@ -22,14 +22,14 @@ void AMoveActor::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-float distance(const FVector& first, const FVector& second)
+float distance(const FVector2D& first, const FVector2D& second)
 {
 	float dx = first.X - second.X;
 	float dy = first.Y - second.Y;
 	return FMath::Sqrt(dx*dx +  dy*dy);
 }
 
-FVector AMoveActor::SetMoveVector()
+FVector2D AMoveActor::SetMoveVector()
 {
 	int32 RandomValue1 = FMath::RandRange(0, 1);
 	int32 RandomValue2 = FMath::RandRange(0, 1);	
@@ -40,16 +40,19 @@ FVector AMoveActor::SetMoveVector()
 		RandomValue2 = FMath::RandRange(0, 1);
 	}
 
-	return FVector(RandomValue1, RandomValue2, 0);
+	return FVector2D(RandomValue1, RandomValue2);
 }
 
 void AMoveActor::Move()
 {
-	SetActorLocation(GetActorLocation() + SetMoveVector());
+	FVector2D randomVector = SetMoveVector();
+	currentLocation += randomVector;
+	UE_LOG(LogTemp, Warning, TEXT("%s randomVector Move! CurrentLocation: %s"), *randomVector.ToString(), *currentLocation.ToString());
 	++moveCount;
 
 	if (moveCount % 10 == 0)	
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Move! Dist: %f, MoveCount: %d"), distance(startLocation, GetActorLocation()), moveCount);
+		UE_LOG(LogTemp, Warning, TEXT("Move! Dist: %f, MoveCount: %d"), distance(startLocation, currentLocation), moveCount);
+		UE_LOG(LogTemp, Warning, TEXT("EventFunction Call"));
 	}	
 }
