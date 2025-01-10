@@ -20,6 +20,7 @@ void AMoveActor::BeginPlay()
 void AMoveActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	//test
 }
 
 float distance(const FVector2D& first, const FVector2D& second)
